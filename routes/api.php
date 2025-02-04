@@ -14,12 +14,12 @@ Route::post('/login', [UserController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
    
         Route::get('/candidates', [CandidateController::class, 'showCandidate'])->middleware(AdminMiddleware::class);
+        Route::get('/users', [UserController::class, 'showUser'])->middleware(AdminMiddleware::class);
         Route::post('/addcandidate', [CandidateController::class, 'addCandidate'])->middleware(AdminMiddleware::class);
         Route::put('/updatecandidate/{id}', [CandidateController::class, 'updateCandidate'])->middleware(AdminMiddleware::class);
         Route::delete('/deletecandidate/{id}', [CandidateController::class, 'deleteCandidate'])->middleware(AdminMiddleware::class);
-        Route::get('/getvotes', [CandidateController::class, 'getVoteCount']);
-        Route::post('/votecandidate/{id}', [CandidateController::class, 'voteCandidate']);
-   
+        Route::get('/getvotes', [VoteController::class, 'getVoteCount']);
+        Route::post('/votecandidate/{id}', [VoteController::class, 'voteCandidate']);
 
 });
 

@@ -1,58 +1,92 @@
-# Voting Application
+# Voting App
 
-This is a backend application for a voting system where users can vote for candidates. It provides functionalities for user authentication, candidate management, and voting.
+This is a simple voting application built with Laravel. It allows users to sign up, log in, view candidates, vote for candidates, and view the vote counts. Admins can manage candidates by adding, updating, and deleting them.
 
 ## Features
 
-- User sign up and login with Aadhar Card Number and password
-- User can view the list of candidates
-- User can vote for a candidate (only once)
-- Admin can manage candidates (add, update, delete)
-- Admin cannot vote
+- User authentication (sign up, log in, log out)
+- Role-based access control (admin and user)
+- Candidate management (add, update, delete candidates)
+- Voting system (users can vote for candidates)
+- View vote counts for each candidate
 
 ## Technologies Used
 
-- Node.js
-- Express.js
-- MongoDB
-- JSON Web Tokens (JWT) for authentication
+- Laravel
+- Sanctum for API token authentication
+- MySQL for database
 
-# API Endpoints
+## API Endpoints
 
-## Authentication
+### Authentication
 
-### Sign Up
-- `POST /signup`: Sign up a user
+#### Sign Up
+- **Endpoint:** `POST /signup`
+- **Description:** Sign up a new user.
 
-### Login
-- `POST /login`: Login a user
+#### Login
+- **Endpoint:** `POST /login`
+- **Description:** Log in an existing user.
 
-## Candidates
+#### Logout
+- **Endpoint:** `POST /logout`
+- **Description:** Log out the current user.
+- **Headers:** `Authorization: Bearer <token>`
 
-### Get Candidates
-- `GET /candidates`: Get the list of candidates
+### Candidates
 
-### Add Candidate
-- `POST /candidate`: Add a new candidate (Admin only)
+#### Get Candidates
+- **Endpoint:** `GET /candidates`
+- **Description:** Get the list of all candidates.
+- **Headers:** `Authorization: Bearer <token>`
 
-### Update Candidate
-- `PUT /candidate/:id`: Update a candidate by ID (Admin only)
+#### Add Candidate (Admin only)
+- **Endpoint:** `POST /candidate`
+- **Description:** Add a new candidate.
+- **Headers:** `Authorization: Bearer <token>`
 
-### Delete Candidate
-- `DELETE /candidate/:id`: Delete a candidate by ID (Admin only)
+#### Update Candidate (Admin only)
+- **Endpoint:** `PUT /candidate/:id`
+- **Description:** Update a candidate by ID.
+- **Headers:** `Authorization: Bearer <token>`
 
-## Voting
+#### Delete Candidate (Admin only)
+- **Endpoint:** `DELETE /candidate/:id`
+- **Description:** Delete a candidate by ID.
+- **Headers:** `Authorization: Bearer <token>`
 
-### Get Vote Count
-- `GET /candidate/vote/count`: Get the count of votes for each candidate
+### Voting
 
-### Vote for Candidate
-- `POST /candidate/vote/:id`: Vote for a candidate (User only)
+#### Get Vote Count
+- **Endpoint:** `GET /getvotes`
+- **Description:** Get the count of votes for each candidate.
+- **Headers:** `Authorization: Bearer <token>`
 
-## User Profile
+#### Vote for Candidate (User only)
+- **Endpoint:** `POST /votecandidate/:id`
+- **Description:** Vote for a candidate.
+- **Headers:** `Authorization: Bearer <token>`
 
-### Get Profile
-- `GET /user/profile`: Get user profile information
+### Users
 
-### Change Password
-- `PUT /user/profile/password`: Change user password
+#### Get Users (Admin only)
+- **Endpoint:** `GET /users`
+- **Description:** Get the list of all users with the role 'user'.
+- **Headers:** `Authorization: Bearer <token>`
+
+## How to Run the Project
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/voting_app.git
+   ```
+
+2. Run database migrations:
+```sh
+ php artisan migrate
+ ```
+
+3. Run dev server:
+```sh
+php artisan serve
+```

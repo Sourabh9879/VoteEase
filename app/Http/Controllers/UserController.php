@@ -61,4 +61,12 @@ class UserController extends Controller
         return ["user"=>$user, "msg"=>"you logged out successfully"];
     
     }
+
+    function showUser(){
+        $users = User::where('role', 'voter')->get();
+        if($users){
+            return response()->json($users);
+        }
+        return response()->json(['message' => 'Failed to fetch users']);
+    }
 }

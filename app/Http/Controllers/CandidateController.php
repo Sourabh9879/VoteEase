@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Candidate;
+use App\Models\Vote;
+use App\Models\User;
 
 class CandidateController extends Controller
 {
    function showCandidate(){
     $candidates = Candidate::all();
     return response()->json($candidates);
-    
    }
 
    function addCandidate(Request $request){
@@ -66,20 +67,6 @@ class CandidateController extends Controller
          return response()->json(['message'=>'candidate deleted successfully']);
          }
          return response()->json(['message'=>'candidate deletion failed']);
-      }
-
-      function getVoteCount(){
-         $candidate = Candidate::withCount('vote_count')->get();
-         return response()->json([$candidate]);
-      }
-
-      function voteCandidate($id){
-         $candidate = Candiadte::find($id);
-         if($candidate){
-            $candiadte->votes()->create(['user_id' => auth()->id()]);
-            return response()->json(['message'=>'vote successfully']);
-         }
-
       }
 
    
