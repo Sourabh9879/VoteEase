@@ -16,11 +16,12 @@ class CandidateController extends Controller
 
    function addCandidate(Request $request){
          $request->validate([
-            'name'=> 'required|string|max:20',
+            'name'=> 'required|string|max:20|unique:candidates,name',
             'party'=> 'required|string|max:20',
             'age'=> 'required|integer|min:18',
          ],[
             'name.required' => 'Name is required.',
+            'name.unique' => 'candidate already exists.',
             'party.required' => 'Party name is required.',
             'age.required' => 'Party name is required.',
             'age.min' => 'age can not be less than 18.',
