@@ -5,21 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    function signup(Request $request){
-        
+    public function register(Request $request)
+    {
         $request->validate([
-            'name' => 'required|string|max:15',
+            'name' => 'required|string|max:255',
             'aadhar_number' => 'required|numeric|digits:12|unique:users',
             'password' => 'required|string|min:8',
-        ],[
-            'aadhar_number.required' => 'Aadhar number is required.',
-            'aadhar_number.numeric' => 'Aadhar number must be a numeric value.',
-            'aadhar_number.digits' => 'Aadhar number must be exactly 12 digits.',
-            'aadhar_number.unique' => 'This Aadhar number is already registered.',
-            'password.min' => 'Password must me minimum 8 characters.',
         ]);
 
         $user = User::create([
@@ -28,45 +23,49 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['user' => $user], 201);
-   
+        return redirect('/login')->with('success', 'Registration successful');
     }
 
-    function login(Request $request){
-
+    public function login(Request $request)
+    {
         $request->validate([
             'aadhar_number' => 'required|numeric|digits:12',
             'password' => 'required|string|min:8',
-        ],[
+        ], [
             'aadhar_number.required' => 'Aadhar number is required.',
             'aadhar_number.numeric' => 'Aadhar number must be a numeric value.',
             'aadhar_number.digits' => 'Aadhar number must be exactly 12 digits.',
-            'password.min' => 'Password must me minimum 8 characters.',
+            'password.min' => 'Password must be at least 8 characters.',
         ]);
 
-        $user = User::where('aadhar_number',$request->aadhar_number)->first();
-        if($user && Hash::check($request->password, $user->password)){
-            $success = $user->createToken('API Token')->plainTextToken;
-            return ["user"=> $user,"token"=>$success , "msg"=>"You logged in successfully"];
-        }else{
-            return ['result'=>"User Not Found Register first"];
+        $credentials = $request->only('aadhar_number', 'password');
+
+        if (Auth::attempt($credentials)) {
+            
+            // Redirect based on user role
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Login successful.');
+            } else {
+                return redirect()->route('user.dashboard')->with('success', 'Login successful.');
+            }
         }
+
+        return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
     }
 
-    function logout(Request $request){
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        $user = $request->user();
-        $user->tokens()->delete(); 
-        
-        return ["user"=>$user, "msg"=>"you logged out successfully"];
+        return redirect('/login')->with('success', 'Logged out successfully.');
+    }
+
+    public function showUser()
+    {
+        $users = User::where('role','voter')->get();
+        return view('admin.users', compact('users'));
+    }
     
-    }
-
-    function showUser(){
-        $users = User::where('role', 'voter')->get();
-        if($users){
-            return response()->json($users);
-        }
-        return response()->json(['message' => 'Failed to fetch users']);
-    }
 }

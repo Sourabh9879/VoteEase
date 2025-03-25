@@ -5,43 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Candidate;
 use App\Models\Vote;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class VoteController extends Controller
 {
     public function getVoteCount()
     {
-        $candidates = Candidate::all(['id', 'name', 'vote_count']);
-        return response()->json($candidates);
+        $candidates = Candidate::all(['id', 'name', 'party', 'vote_count']);
+        
+        // Get user data for calculating turnout
+        $users = User::all();
+        $voters = $users->where('role', 'voter')->count();
+        $votesCast = $users->where('is_voted', true)->count();
+        $turnoutPercentage = $voters > 0 ? number_format(($votesCast / $voters * 100), 1) : '0.0';
+        
+        // Sort candidates by vote count (descending)
+        $candidates = $candidates->sortByDesc('vote_count');
+        
+        // Calculate total votes from candidates
+        $totalVotes = $candidates->sum('vote_count');
+        
+        return view('admin.results', compact(
+            'candidates',
+            'voters',
+            'votesCast',
+            'turnoutPercentage',
+            'totalVotes'
+        ));
     }
 
-    public function voteCandidate(Request $request, $id)
+    public function voteCandidate($id)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $candidate = Candidate::findOrFail($id);
 
-        $user = User::find($request->user_id);
-
-        if ($user->role === 'admin') {
-            return response()->json(['message' => 'Admin cannot vote.'], 403);
+        // Check if the user has already voted
+        $hasVoted = Vote::where('user_id', Auth::id())->exists();
+        if ($hasVoted) {
+            return redirect()->back()->with('error', 'You have already voted.');
         }
 
-        if ($user->is_voted) {
-            return response()->json(['message' => 'User has already voted.'], 400);
-        }
-
-        $candidate = Candidate::find($id);
-
-        Vote::create([
-            'user_id' => $request->user_id,
-            'candidate_id' => $id,
-        ]);
+        $vote = new Vote();
+        $vote->user_id = Auth::id();
+        $vote->candidate_id = $candidate->id;
+        $vote->save();
 
         $candidate->increment('vote_count');
-        $user->is_voted = true;
-        $user->save();
 
-        return response()->json(['message' => 'Vote successfully.']);
+        return redirect()->back()->with('success', 'Your vote has been cast successfully.');
     }
 }

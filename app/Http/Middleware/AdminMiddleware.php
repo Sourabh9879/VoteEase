@@ -1,12 +1,10 @@
 <?php
 
-
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AdminMiddleware
 {
@@ -16,6 +14,10 @@ class AdminMiddleware
             return $next($request);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 403);
+        if ($request->wantsJson() || $request->is('api/*')) {
+            return response()->json(['error' => 'Unauthorized. Admin access required.'], 403);
+        }
+
+        return redirect('/login')->with('error', 'Unauthorized. Admin access required.');
     }
 }
