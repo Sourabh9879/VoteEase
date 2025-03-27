@@ -2,6 +2,18 @@
 
 @section('title', 'Admin Dashboard - Voting System')
 
+@section('styles')
+<style>
+    .card {
+        transition: none !important;
+        transform: none !important;
+    }
+    .card:hover {
+        transform: none !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row mb-4">
@@ -28,7 +40,7 @@
                         </div>
                         <div class="ms-3">
                             <h5 class="card-title">Total Users</h5>
-                            <h3 class="mb-0" id="total-users">{{ $totalUsers }}</h3>
+                            <h3 class="mb-0">{{ $totalUsers }}</h3>
                         </div>
                     </div>
                 </div>
@@ -44,7 +56,7 @@
                         </div>
                         <div class="ms-3">
                             <h5 class="card-title">Users Voted</h5>
-                            <h3 class="mb-0" id="users-voted">{{ $usersVoted }}</h3>
+                            <h3 class="mb-0">{{ $usersVoted }}</h3>
                         </div>
                     </div>
                 </div>
@@ -60,7 +72,7 @@
                         </div>
                         <div class="ms-3">
                             <h5 class="card-title">Candidates</h5>
-                            <h3 class="mb-0" id="total-candidates">{{ $totalCandidates }}</h3>
+                            <h3 class="mb-0">{{ $totalCandidates }}</h3>
                         </div>
                     </div>
                 </div>

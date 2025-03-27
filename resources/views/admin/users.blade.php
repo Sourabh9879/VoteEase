@@ -17,57 +17,54 @@
         </div>
     </div>
 
-    <div id="users-container">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Aadhar Number</th>
+                            <th scope="col">Voting Status</th>
+                            <th scope="col">Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($users->isEmpty())
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <p>No users found.</p>
+                            </td>
+                        </tr>
+                        @else
+                            @foreach($users as $index => $user)
+                            @php
+                                // Mask the Aadhar number for privacy (show only last 4 digits)
+                                $maskedAadhar = substr($user->aadhar_number, 0, 8);
+                                $maskedAadhar = str_repeat('X', 8) . substr($user->aadhar_number, 8);
+                                
+                                // Format the Aadhar number for display (XXXX-XXXX-NNNN)
+                                $formattedAadhar = substr($maskedAadhar, 0, 4) . '-' . substr($maskedAadhar, 4, 4) . '-' . substr($maskedAadhar, 8, 4);
+                                
+                                // Format the date
+                                $createdDate = date('Y-m-d', strtotime($user->created_at));
+                            @endphp
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Aadhar Number</th>
-                                <th scope="col">Voting Status</th>
-                                <th scope="col">Registered On</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if($users->isEmpty())
-                            <tr>
-                                <td colspan="7" class="text-center py-4">
-                                    <p>No users found.</p>
+                                <th scope="row">{{ $index + 1 }}</th>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $formattedAadhar }}</td>
+                                <td>
+                                    <span class="badge {{ $user->is_voted ? 'bg-success' : 'bg-warning' }}">
+                                        {{ $user->is_voted ? 'Voted' : 'Not Voted' }}
+                                    </span>
                                 </td>
+                                <td>{{ $createdDate }}</td>
                             </tr>
-                            @else
-                                @foreach($users as $index => $user)
-                                @php
-                                    // Mask the Aadhar number for privacy (show only last 4 digits)
-                                    $maskedAadhar = substr($user->aadhar_number, 0, 8);
-                                    $maskedAadhar = str_repeat('X', 8) . substr($user->aadhar_number, 8);
-                                    
-                                    // Format the Aadhar number for display (XXXX-XXXX-NNNN)
-                                    $formattedAadhar = substr($maskedAadhar, 0, 4) . '-' . substr($maskedAadhar, 4, 4) . '-' . substr($maskedAadhar, 8, 4);
-                                    
-                                    // Format the date
-                                    $createdDate = date('Y-m-d', strtotime($user->created_at));
-                                @endphp
-                                <tr>
-                                    <th scope="row">{{ $index + 1 }}</th>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $formattedAadhar }}</td>
-                                   
-                                    <td>
-                                        <span class="badge {{ $user->is_voted ? 'bg-success' : 'bg-warning' }}">
-                                            {{ $user->is_voted ? 'Voted' : 'Not Voted' }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $createdDate }}</td>
-                                </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

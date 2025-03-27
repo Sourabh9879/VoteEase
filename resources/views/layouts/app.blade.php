@@ -28,10 +28,11 @@
         .card {
             border-radius: 10px;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            transition: transform 0.3s ease;
+            transition: none !important;
+            transform: none !important;
         }
         .card:hover {
-            transform: translateY(-5px);
+            transform: none !important;
         }
         .btn-primary {
             background-color: #3490dc;
@@ -51,6 +52,12 @@
             top: 20px;
             right: 20px;
             z-index: 9999;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.08);
+        }
+        .btn {
+            border-radius: 5px;
         }
     </style>
     @yield('styles')

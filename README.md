@@ -1,92 +1,152 @@
-# Voting App
+# Online Voting System
 
-This is a simple voting application built with Laravel. It allows users to sign up, log in, view candidates, vote for candidates, and view the vote counts. Admins can manage candidates by adding, updating, and deleting them.
+A secure and user-friendly online voting system built with Laravel PHP Framework.
 
 ## Features
 
-- User authentication (sign up, log in, log out)
-- Role-based access control (admin and user)
-- Candidate management (add, update, delete candidates)
-- Voting system (users can vote for candidates)
-- View vote counts for each candidate
+### For Voters
+- Secure registration with Aadhar number verification
+- One-time voting capability
+- View voting results
+- User-friendly interface
 
-## Technologies Used
+### For Administrators
+- Dashboard with key statistics
+- Manage candidates (add, edit, delete)
+- Monitor voter participation
+- View detailed voting results
+- Track voter turnout
 
-- Laravel
-- Sanctum for API token authentication
-- MySQL for database
+## Technical Requirements
 
-## API Endpoints
+- PHP >= 8.0
+- MySQL >= 5.7
+- Composer
+- Laravel >= 9.0
 
-### Authentication
+## Installation
 
-#### Sign Up
-- **Endpoint:** `POST /signup`
-- **Description:** Sign up a new user.
+1. Clone the repository
+```bash
+git clone [repository-url]
+cd voting-system
+```
 
-#### Login
-- **Endpoint:** `POST /login`
-- **Description:** Log in an existing user.
+2. Install PHP dependencies
+```bash
+composer install
+```
 
-#### Logout
-- **Endpoint:** `POST /logout`
-- **Description:** Log out the current user.
-- **Headers:** `Authorization: Bearer <token>`
+3. Install NPM dependencies
+```bash
+npm install
+```
 
-### Candidates
+4. Create environment file
+```bash
+cp .env.example .env
+```
 
-#### Get Candidates
-- **Endpoint:** `GET /candidates`
-- **Description:** Get the list of all candidates.
-- **Headers:** `Authorization: Bearer <token>`
+5. Generate application key
+```bash
+php artisan key:generate
+```
 
-#### Add Candidate (Admin only)
-- **Endpoint:** `POST /candidate`
-- **Description:** Add a new candidate.
-- **Headers:** `Authorization: Bearer <token>`
+6. Configure database in .env file
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=voting_system
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-#### Update Candidate (Admin only)
-- **Endpoint:** `PUT /candidate/:id`
-- **Description:** Update a candidate by ID.
-- **Headers:** `Authorization: Bearer <token>`
+7. Run database migrations
+```bash
+php artisan migrate
+```
 
-#### Delete Candidate (Admin only)
-- **Endpoint:** `DELETE /candidate/:id`
-- **Description:** Delete a candidate by ID.
-- **Headers:** `Authorization: Bearer <token>`
-
-### Voting
-
-#### Get Vote Count
-- **Endpoint:** `GET /getvotes`
-- **Description:** Get the count of votes for each candidate.
-- **Headers:** `Authorization: Bearer <token>`
-
-#### Vote for Candidate (User only)
-- **Endpoint:** `POST /votecandidate/:id`
-- **Description:** Vote for a candidate.
-- **Headers:** `Authorization: Bearer <token>`
-
-### Users
-
-#### Get Users (Admin only)
-- **Endpoint:** `GET /users`
-- **Description:** Get the list of all users with the role 'user'.
-- **Headers:** `Authorization: Bearer <token>`
-
-## How to Run the Project
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/voting_app.git
-   ```
-
-2. Run database migrations:
-```sh
- php artisan migrate
- ```
-
-3. Run dev server:
-```sh
+8. Start the development server
+```bash
 php artisan serve
 ```
+
+## Database Structure
+
+### Users Table
+- id (Primary Key)
+- name
+- aadhar_number (Unique)
+- password
+- role (admin/voter)
+- is_voted (boolean)
+- created_at
+- updated_at
+
+### Candidates Table
+- id (Primary Key)
+- name
+- party
+- age
+- vote_count
+- created_at
+- updated_at
+
+### Votes Table
+- id (Primary Key)
+- user_id (Foreign Key)
+- candidate_id (Foreign Key)
+- created_at
+- updated_at
+
+## Routes
+
+### Public Routes
+```
+GET / - Welcome page
+GET /login - Login page
+POST /login - Handle login
+GET /signup - Registration page
+POST /signup - Handle registration
+```
+
+### Protected Routes (Requires Authentication)
+
+#### Voter Routes
+```
+GET /user/dashboard - Voter dashboard
+GET /user/candidates - View candidates
+POST /user/vote/{id} - Cast vote
+GET /user/results - View results
+```
+
+#### Admin Routes
+```
+GET /admin/dashboard - Admin dashboard
+GET /admin/candidates - Manage candidates
+POST /admin/candidates - Add candidate
+PUT /admin/candidates/{id} - Update candidate
+DELETE /admin/candidates/{id} - Delete candidate
+GET /admin/users - Manage users
+GET /admin/results - View results
+```
+
+## Security Features
+
+1. **Authentication**
+   - Secure password hashing
+   - Aadhar number validation
+   - Session management
+
+2. **Authorization**
+   - Role-based access control
+   - Admin middleware protection
+   - One-time voting validation
+
+3. **Data Protection**
+   - CSRF protection
+   - Input validation
+   - XSS prevention
+   - Masked Aadhar numbers
+

@@ -37,21 +37,32 @@ class VoteController extends Controller
 
     public function voteCandidate($id)
     {
-        $candidate = Candidate::findOrFail($id);
+        try {
+            $candidate = Candidate::findOrFail($id);
+            $user = Auth::user();
 
-        // Check if the user has already voted
-        $hasVoted = Vote::where('user_id', Auth::id())->exists();
-        if ($hasVoted) {
-            return redirect()->back()->with('error', 'You have already voted.');
+            // Check if the user has already voted
+            if ($user->is_voted) {
+                return redirect()->back()->with('error', 'You have already cast your vote. Each voter can only vote once.');
+            }
+
+            // Create vote record
+            $vote = new Vote();
+            $vote->user_id = $user->id;
+            $vote->candidate_id = $candidate->id;
+            $vote->save();
+
+            // Update candidate vote count
+            $candidate->increment('vote_count');
+
+            // Update user's voting status
+            $user->is_voted = true;
+            $user->save();
+
+            return redirect()->back()->with('success', "Thank you for voting! Your vote for {$candidate->name} has been recorded successfully.");
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while processing your vote. Please try again.');
         }
-
-        $vote = new Vote();
-        $vote->user_id = Auth::id();
-        $vote->candidate_id = $candidate->id;
-        $vote->save();
-
-        $candidate->increment('vote_count');
-
-        return redirect()->back()->with('success', 'Your vote has been cast successfully.');
     }
 }

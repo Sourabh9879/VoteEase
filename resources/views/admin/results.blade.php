@@ -2,6 +2,18 @@
 
 @section('title', 'Election Results - Voting System')
 
+@section('styles')
+<style>
+    .card {
+        transition: none !important;
+        transform: none !important;
+    }
+    .card:hover {
+        transform: none !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row mb-4">
