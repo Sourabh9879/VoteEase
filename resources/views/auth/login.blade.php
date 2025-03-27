@@ -50,7 +50,7 @@
     <div class="container">
         <div class="login-container">
             <div class="login-header">
-                <h2><i class="fas fa-vote-yea me-2"></i> Voting System</h2>
+                <h2><i class="fas fa-vote-yea me-2"></i> VoteEase</h2>
                 <p class="text-muted">Login to your account</p>
             </div>
 
