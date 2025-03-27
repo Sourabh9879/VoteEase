@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Results - Voting System')
+@section('title', 'Results')
 
 @section('styles')
 <style>

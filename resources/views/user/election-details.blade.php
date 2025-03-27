@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $election->title . ' - Voting System')
+@section('title', $election->title)
 
 @section('content')
 <div class="container">
