@@ -45,9 +45,9 @@ class CandidateController extends Controller
     public function updateCandidate(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'party' => 'required|string|max:255',
-            'age' => 'required|integer|min:18',
+            'name' => 'string|max:255',
+            'party' => 'string|max:255',
+            'age' => 'integer|min:18',
         ]);
 
         $candidate = Candidate::findOrFail($id);

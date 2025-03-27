@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Assign Candidates - Voting System')
+@section('title', 'Assign Candidates')
 
 @section('content')
 <div class="container">

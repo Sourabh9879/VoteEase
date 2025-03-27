@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manage Elections - Voting System')
+@section('title', 'Manage Elections')
 
 @section('content')
 <div class="container">
@@ -67,9 +67,6 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.elections.show', $election->id) }}" class="btn btn-sm btn-outline-info me-1">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                                 <a href="{{ route('admin.elections.edit', $election->id) }}" class="btn btn-sm btn-outline-primary me-1">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
