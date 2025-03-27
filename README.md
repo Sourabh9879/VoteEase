@@ -1,4 +1,4 @@
-# Online Voting System
+# VoteEase - Online Voting System
 
 A secure and user-friendly online voting system built with Laravel PHP Framework.
 
@@ -119,6 +119,8 @@ GET /user/dashboard - Voter dashboard
 GET /user/candidates - View candidates
 POST /user/vote/{id} - Cast vote
 GET /user/results - View results
+GET /user/elections - View active elections
+GET /user/elections/{id} - View election details
 ```
 
 #### Admin Routes
@@ -130,6 +132,16 @@ PUT /admin/candidates/{id} - Update candidate
 DELETE /admin/candidates/{id} - Delete candidate
 GET /admin/users - Manage users
 GET /admin/results - View results
+GET /admin/elections - View all elections
+GET /admin/elections/create - Create a new election
+POST /admin/elections - Store a new election
+GET /admin/elections/{id} - View election details
+GET /admin/elections/{id}/edit - Edit an election
+PUT /admin/elections/{id} - Update an election
+DELETE /admin/elections/{id} - Delete an election
+GET /admin/elections/{id}/candidates - View candidates for an election
+GET /admin/elections/{id}/assign - Assign candidates to an election
+POST /admin/elections/{id}/assign - Save assigned candidates
 ```
 
 ## Security Features
