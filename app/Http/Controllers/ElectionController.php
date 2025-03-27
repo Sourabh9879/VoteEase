@@ -47,24 +47,28 @@ class ElectionController extends Controller
     /**
      * Display the specified election.
      */
-    public function show(Election $election)
+    public function show($id)
     {
+        $election = Election::findOrFail($id);
         return view('admin.elections.show', compact('election'));
     }
 
     /**
      * Show the form for editing the specified election.
      */
-    public function edit(Election $election)
+    public function edit($id)
     {
+        $election = Election::findOrFail($id);
         return view('admin.elections.edit', compact('election'));
     }
 
     /**
      * Update the specified election in storage.
      */
-    public function update(Request $request, Election $election)
+    public function update(Request $request, $id)
     {
+        $election = Election::findOrFail($id);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -82,8 +86,9 @@ class ElectionController extends Controller
     /**
      * Remove the specified election from storage.
      */
-    public function destroy(Election $election)
+    public function destroy($id)
     {
+        $election = Election::findOrFail($id);
         $election->delete();
 
         return redirect()->route('admin.elections.index')
@@ -93,8 +98,9 @@ class ElectionController extends Controller
     /**
      * Display the candidates associated with the election.
      */
-    public function showCandidates(Election $election)
+    public function showCandidates($id)
     {
+        $election = Election::findOrFail($id);
         $candidates = $election->candidates;
         return view('admin.elections.candidates', compact('election', 'candidates'));
     }
@@ -102,8 +108,9 @@ class ElectionController extends Controller
     /**
      * Show the form for assigning candidates to an election.
      */
-    public function assignCandidatesForm(Election $election)
+    public function assignCandidatesForm($id)
     {
+        $election = Election::findOrFail($id);
         $candidates = Candidate::where('election_id', null)
             ->orWhere('election_id', $election->id)
             ->get();
@@ -115,8 +122,10 @@ class ElectionController extends Controller
     /**
      * Assign candidates to an election.
      */
-    public function assignCandidates(Request $request, Election $election)
+    public function assignCandidates(Request $request, $id)
     {
+        $election = Election::findOrFail($id);
+
         $request->validate([
             'candidates' => 'array',
             'candidates.*' => 'exists:candidates,id',
@@ -151,8 +160,9 @@ class ElectionController extends Controller
     /**
      * Show election details for users.
      */
-    public function userViewElection(Election $election)
+    public function userViewElection($id)
     {
+        $election = Election::findOrFail($id);
         $candidates = $election->candidates;
         return view('user.election-details', compact('election', 'candidates'));
     }
