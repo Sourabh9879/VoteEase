@@ -50,7 +50,7 @@
     <div class="container">
         <div class="signup-container">
             <div class="signup-header">
-                <h2><i class="fas fa-vote-yea me-2"></i> VoteEase2>
+                <h2><i class="fas fa-vote-yea me-2"></i> VoteEase
                 <p class="text-muted">Create your account</p>
             </div>
 
