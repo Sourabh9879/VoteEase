@@ -85,6 +85,10 @@
                                 <a class="nav-link" href="{{ route('admin.candidates.add') }}">Add Candidate</a>
                             </li>
                         @else
+
+                        <li class="nav-item">
+                                <a class="nav-link" href="{{ route('user.dashboard') }}">Dashboard</a>
+                            </li>
                            
                         @endif
                     @endauth
