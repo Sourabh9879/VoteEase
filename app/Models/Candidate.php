@@ -12,6 +12,22 @@ class Candidate extends Model
     use HasFactory, Notifiable, HasApiTokens;
 
     protected $fillable = [
-        'name', 'party', 'age', 'vote_count'
+        'name', 'party', 'age', 'vote_count', 'election_id', 'description'
     ];
+
+    /**
+     * Get the election that owns the candidate.
+     */
+    public function election()
+    {
+        return $this->belongsTo(Election::class);
+    }
+
+    /**
+     * Get the votes for the candidate.
+     */
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 }
